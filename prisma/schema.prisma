@@ -1,0 +1,163 @@
+// prisma/schema.prisma
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+// prisma/schema.prisma
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+  // uncomment next line if you use Prisma <5.10
+  // directUrl = env("DATABASE_URL_UNPOOLED")
+}
+
+enum Role {
+  USER
+  ADMIN
+}
+
+model User {
+  id          Int       @id @default(autoincrement())
+  email       String    @unique
+  firstName   String
+  lastName    String
+  password    String
+  role        Role      @default(USER)
+  phoneNumber String?   @unique
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime? @updatedAt
+
+  // ✅ One user -> many saved locations
+  locations         UserLocation[]
+  DiscussionComment DiscussionComment[]
+}
+
+model UserLocation {
+  id     Int  @id @default(autoincrement())
+  user   User @relation(fields: [userId], references: [id])
+  userId Int
+
+  // ✅ Point coordinates
+  latitude  Float
+  longitude Float
+
+  // ✅ Extra info
+  name        String // e.g. "Home", "Work", "Vacation House"
+  description String? // optional notes
+
+  // ✅ (Optional) Store full GeoJSON (for polygons, zones, etc.)
+  geoJson Json? // e.g. polygon drawn from Leaflet
+
+  createdAt             DateTime               @default(now())
+  updatedAt             DateTime               @updatedAt
+  affectedUserLocations AffectedUserLocation[]
+
+  @@index([userId])
+}
+
+enum FacilityType {
+  HOSPITAL
+  CLINIC
+  FIRESTATION
+  POLICE
+  EVAC_CENTER
+}
+
+enum DisasterType {
+  FLOOD
+  FIRE
+  EARTHQUAKE
+  LANDSLIDE
+  TYPHOON
+}
+
+enum DangerLevel {
+  LOW
+  MEDIUM
+  HIGH
+}
+
+model Facility {
+  id        Int          @id @default(autoincrement())
+  name      String
+  type      FacilityType
+  latitude  Float
+  longitude Float
+  createdAt DateTime     @default(now())
+  updatedAt DateTime     @updatedAt
+}
+
+enum ZoneStatus {
+  ACTIVE
+  RESOLVED
+}
+
+model Zone {
+  id                    Int                    @id @default(autoincrement())
+  name                  String
+  description           String?
+  status                ZoneStatus // e.g. "active", "resolved"
+  geoJson               Json // polygon/circle stored as GeoJSON
+  disasterType          DisasterType
+  dangerLevel           DangerLevel
+  dateActive            DateTime               @default(now())
+  dateResolved          DateTime?
+  createdAt             DateTime               @default(now())
+  updatedAt             DateTime               @updatedAt
+  discussion            Discussion?
+  affectedUserLocations AffectedUserLocation[]
+}
+
+model Discussion {
+  id        Int                 @id @default(autoincrement())
+  zone      Zone                @relation(fields: [zoneId], references: [id], onDelete: Cascade)
+  zoneId    Int                 @unique
+  content   String
+  createdAt DateTime            @default(now())
+  updatedAt DateTime            @updatedAt
+  comments  DiscussionComment[]
+
+  upvotes   Int @default(0)
+  downvotes Int @default(0)
+}
+
+model DiscussionComment {
+  id           Int        @id @default(autoincrement())
+  discussion   Discussion @relation(fields: [discussionId], references: [id], onDelete: Cascade)
+  discussionId Int
+
+  // ✅ Link to User
+  author   User @relation(fields: [authorId], references: [id], onDelete: Cascade)
+  authorId Int
+
+  content   String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  parentId Int?
+  parent   DiscussionComment?  @relation("CommentReplies", fields: [parentId], references: [id])
+  replies  DiscussionComment[] @relation("CommentReplies")
+
+  upvotes   Int @default(0)
+  downvotes Int @default(0)
+}
+
+enum AffectedUserLocationStatus {
+  SAFE
+  AT_RISK
+  EVACUATED
+}
+
+model AffectedUserLocation {
+  id             Int                         @id @default(autoincrement())
+  zone           Zone                        @relation(fields: [zoneId], references: [id], onDelete: Cascade)
+  zoneId         Int
+  status         AffectedUserLocationStatus?
+  isNotified     Boolean                     @default(false)
+  userLocation   UserLocation                @relation(fields: [userLocationId], references: [id])
+  userLocationId Int
+  createdAt      DateTime                    @default(now())
+
+  @@unique([zoneId, userLocationId])
+}
