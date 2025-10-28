@@ -6,13 +6,15 @@ export async function sendSms(
   const token = process.env.NEXT_PUBLIC_PHILSMS_API_TOKEN;
 
   if (!token) {
-    throw new Error("❌ Missing PHILSMS_API_TOKEN in .env file");
+    throw new Error("❌ Missing NEXT_PUBLIC_PHILSMS_API_TOKEN in .env file");
   }
 
+  // ✅ FIX: PhilSMS expects recipient *without +*, type, and plain text message
   const send_data = {
-    sender_id, // "PhilSMS", your approved name, or your phone number
-    recipient, // e.g. "+639171234567"
-    message, // text message content
+    recipient: recipient.replace(/^\+/, ""), // e.g. 639171234567
+    sender_id, // must be approved sender ID
+    type: "plain",
+    message,
   };
 
   try {
@@ -20,6 +22,7 @@ export async function sendSms(
       method: "POST",
       headers: {
         "Content-Type": "application/json",
+        Accept: "application/json",
         Authorization: `Bearer ${token}`,
       },
       body: JSON.stringify(send_data),
@@ -30,7 +33,7 @@ export async function sendSms(
     if (result.status === "success") {
       console.log(`✅ SMS sent successfully to ${recipient}`);
     } else {
-      console.error(`❌ Error sending SMS:`, result);
+      console.error(`❌ SMS sending failed:`, result.message || result);
     }
 
     return result;
@@ -39,6 +42,3 @@ export async function sendSms(
     throw error;
   }
 }
-
-// Example usage:
-// sendSms("+639811473152", "Hello from PhilSMS API!", "PhilSMS");
