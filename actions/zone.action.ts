@@ -46,7 +46,9 @@ export async function createZone(data: FormData) {
         // ✅ Send SMS if phone number available
         if (loc.user.phoneNumber) {
           console.log(`📱 SMS ${loc.user.phoneNumber}`);
-          const message = `⚠️ ALERT: You are in a ${zone.dangerLevel.toLowerCase()} danger zone due to ${zone.disasterType.toLowerCase()}. Stay alert and follow safety protocols.`;
+          const message = `Update: ${
+            loc.name
+          } is a ${zone.dangerLevel.toLowerCase()} risk area for ${zone.disasterType.toLowerCase()}. Stay cautious and follow local news.`;
 
           try {
             await sendSms(loc.user.phoneNumber, message);
