@@ -37,8 +37,8 @@ export default function AnnouncementsPage() {
     { name: "Iligan Fire Station", number: "(063) 221-2222" },
     { name: "Iligan City Hospital", number: "(063) 221-6693" },
     { name: "Iligan Medical Center", number: "(063) 221-5227" },
-    { name: "CDRRMO Iligan", number: "(063) 221-5444" },
-    { name: "Iligan Rescue 911", number: "0917-711-0911" },
+    { name: "CDRRMO Iligan (Globe)", number: "0997-726-2692" },
+    { name: "CDRRMO Iligan (Smart)", number: "0969-233-7878" },
   ];
 
   const HotlineSection = ({
