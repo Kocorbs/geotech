@@ -25,11 +25,7 @@ export default function AnnouncementsPage() {
   ];
 
   const tubodEmergency: Hotline[] = [
-    { name: "Tubod Police Station", number: "(063) 341-5028" },
-    { name: "Tubod Municipal Hall", number: "(063) 341-5016" },
-    { name: "Tubod Rural Health Unit", number: "(063) 341-5017" },
-    { name: "Tubod Fire Station", number: "(063) 341-5160" },
-    { name: "MDRRMO Tubod", number: "0917-564-2891" },
+    { name: "Barangay Hall Tubod", number: "(063) 440-1925" },
   ];
 
   const iliganEmergency: Hotline[] = [
