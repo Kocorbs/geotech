@@ -87,15 +87,17 @@ export default async function DiscussionPage({
     );
   }
 
-  const formatDate = (date: Date | string) => {
-    return new Date(date).toLocaleDateString("en-US", {
-      month: "short",
-      day: "numeric",
-      year: "numeric",
-      hour: "2-digit",
-      minute: "2-digit",
-    });
-  };
+ const formatDate = (date: Date | string) => {
+  return new Date(date).toLocaleString("en-PH", {
+    month: "short",
+    day: "numeric",
+    year: "numeric",
+    hour: "2-digit",
+    minute: "2-digit",
+    hour12: true, // optional: show AM/PM
+    timeZone: "Asia/Manila", // ✅ Force PH timezone
+  });
+};
 
   const netVotes = discussion.upvotes - discussion.downvotes;
 
