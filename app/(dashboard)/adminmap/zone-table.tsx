@@ -123,7 +123,7 @@ export default function ZoneTable({ zones }: { zones: any[] }) {
                   </SelectTrigger>
                   <SelectContent>
                     <SelectItem value="ACTIVE">ACTIVE</SelectItem>
-                    <SelectItem value="RESOLVED">RESOLVED</SelectItem>
+                    <SelectItem value="RESOLVED">INACTIVE</SelectItem>
                   </SelectContent>
                 </Select>
               </TableCell>
