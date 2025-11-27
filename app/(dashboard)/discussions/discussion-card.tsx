@@ -11,8 +11,6 @@ import {
   MapPin,
   MessageSquare,
   Clock,
-  TrendingUp,
-  TrendingDown,
   AlertTriangle,
   Flame,
   Waves,
@@ -38,7 +36,7 @@ const getDisasterIcon = (type: string) => {
   }
 };
 
-// Danger level colors using shadcn/tailwind semantic colors
+// Danger level colors
 const getDangerLevelStyle = (level: string) => {
   switch (level) {
     case "HIGH":
@@ -84,8 +82,6 @@ export default function DiscussionCard({
     });
   };
 
-  const netVotes = discussion.upvotes - discussion.downvotes;
-
   return (
     <Card
       className="w-full hover:shadow-lg transition-shadow duration-300 border-l-4"
@@ -116,6 +112,7 @@ export default function DiscussionCard({
             </div>
           </div>
 
+          {/* Danger Level */}
           <span
             className={`px-3 py-1 rounded-full text-xs font-semibold border whitespace-nowrap ${getDangerLevelStyle(
               discussion.zone.dangerLevel
@@ -128,6 +125,8 @@ export default function DiscussionCard({
 
       <CardContent className="pb-3">
         <div className="grid grid-cols-2 gap-4">
+
+          {/* Affected Users */}
           <div className="flex items-center gap-2 text-sm">
             <MapPin className="w-4 h-4 text-muted-foreground" />
             <div>
@@ -138,6 +137,7 @@ export default function DiscussionCard({
             </div>
           </div>
 
+          {/* Comments */}
           <div className="flex items-center gap-2 text-sm">
             <MessageSquare className="w-4 h-4 text-muted-foreground" />
             <div>
@@ -148,6 +148,7 @@ export default function DiscussionCard({
             </div>
           </div>
 
+          {/* Created At */}
           <div className="flex items-center gap-2 text-sm">
             <Clock className="w-4 h-4 text-muted-foreground" />
             <div>
@@ -157,28 +158,9 @@ export default function DiscussionCard({
               </p>
             </div>
           </div>
-
-          <div className="flex items-center gap-2 text-sm">
-            <div className="flex items-center gap-1">
-              <TrendingUp className="w-4 h-4 text-green-500" />
-              <TrendingDown className="w-4 h-4 text-destructive" />
-            </div>
-            <div>
-              <p className="text-muted-foreground text-xs">Net Votes</p>
-              <p
-                className={`font-semibold ${
-                  netVotes >= 0
-                    ? "text-green-600 dark:text-green-500"
-                    : "text-destructive"
-                }`}
-              >
-                {netVotes >= 0 ? "+" : ""}
-                {netVotes}
-              </p>
-            </div>
-          </div>
         </div>
 
+        {/* Zone Description */}
         {discussion.zone.description && (
           <div className="mt-3 pt-3 border-t">
             <p className="text-xs text-muted-foreground line-clamp-2">
@@ -189,6 +171,8 @@ export default function DiscussionCard({
       </CardContent>
 
       <CardFooter className="pt-0 flex items-center justify-between">
+
+        {/* Status Badge (ACTIVE or INACTIVE) */}
         <div className="flex items-center gap-2">
           <span
             className={`px-2 py-1 rounded text-xs font-medium ${
@@ -197,10 +181,11 @@ export default function DiscussionCard({
                 : "bg-muted text-muted-foreground"
             }`}
           >
-            {discussion.zone.status}
+            {discussion.zone.status === "ACTIVE" ? "ACTIVE" : "INACTIVE"}
           </span>
         </div>
 
+        {/* View Discussion Button */}
         <Link href={`/discussions/${discussion.id}`}>
           <Button size="sm" className="gap-2">
             View Discussion
