@@ -4,8 +4,6 @@ import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import {
   MapPin,
-  TrendingUp,
-  TrendingDown,
   AlertTriangle,
   Flame,
   Waves,
@@ -87,25 +85,24 @@ export default async function DiscussionPage({
     );
   }
 
- const formatDate = (date: Date | string) => {
-  return new Date(date).toLocaleString("en-PH", {
-    month: "short",
-    day: "numeric",
-    year: "numeric",
-    hour: "2-digit",
-    minute: "2-digit",
-    hour12: true, // optional: show AM/PM
-    timeZone: "Asia/Manila", // ✅ Force PH timezone
-  });
-};
-
-  const netVotes = discussion.upvotes - discussion.downvotes;
+  const formatDate = (date: Date | string) => {
+    return new Date(date).toLocaleString("en-PH", {
+      month: "short",
+      day: "numeric",
+      year: "numeric",
+      hour: "2-digit",
+      minute: "2-digit",
+      hour12: true,
+      timeZone: "Asia/Manila",
+    });
+  };
 
   return (
     <main className="min-h-screen bg-background">
       <SiteHeader title={discussion.zone.name} />
 
       <div className="container max-w-4xl mx-auto px-4 py-6 space-y-6">
+
         {/* Zone Information Card */}
         <Card
           className="border-l-4"
@@ -125,11 +122,13 @@ export default async function DiscussionPage({
                 >
                   {getDisasterIcon(discussion.zone.disasterType)}
                 </div>
+
                 <div className="flex-1">
                   <div className="flex items-center gap-2 mb-2">
                     <h1 className="text-2xl font-bold">
                       {discussion.zone.name}
                     </h1>
+
                     <span
                       className={`px-3 py-1 rounded-full text-xs font-semibold border ${getDangerLevelStyle(
                         discussion.zone.dangerLevel
@@ -137,6 +136,8 @@ export default async function DiscussionPage({
                     >
                       {discussion.zone.dangerLevel}
                     </span>
+
+                    {/* STATUS - ACTIVE OR INACTIVE */}
                     <span
                       className={`px-2 py-1 rounded text-xs font-medium ${
                         discussion.zone.status === "ACTIVE"
@@ -144,9 +145,13 @@ export default async function DiscussionPage({
                           : "bg-muted text-muted-foreground"
                       }`}
                     >
-                      {discussion.zone.status}
+                      {discussion.zone.status === "ACTIVE"
+                        ? "ACTIVE"
+                        : "INACTIVE"}
                     </span>
                   </div>
+
+                  {/* Description */}
                   {discussion.zone.description &&
                     discussion.zone.description !== "undefined" && (
                       <p className="text-muted-foreground">
@@ -157,8 +162,12 @@ export default async function DiscussionPage({
               </div>
             </div>
           </CardHeader>
+
+          {/* INFO GRID */}
           <CardContent>
-            <div className="grid sm:grid-cols-4 gap-4">
+            <div className="grid sm:grid-cols-3 gap-4">
+
+              {/* Affected */}
               <div className="flex items-center gap-2">
                 <MapPin className="w-4 h-4 text-muted-foreground" />
                 <div>
@@ -168,6 +177,8 @@ export default async function DiscussionPage({
                   </p>
                 </div>
               </div>
+
+              {/* Comments */}
               <div className="flex items-center gap-2">
                 <MessageSquare className="w-4 h-4 text-muted-foreground" />
                 <div>
@@ -175,6 +186,8 @@ export default async function DiscussionPage({
                   <p className="font-semibold">{discussion.comments.length}</p>
                 </div>
               </div>
+
+              {/* Active Since */}
               <div className="flex items-center gap-2">
                 <Calendar className="w-4 h-4 text-muted-foreground" />
                 <div>
@@ -184,25 +197,7 @@ export default async function DiscussionPage({
                   </p>
                 </div>
               </div>
-              <div className="flex items-center gap-2">
-                <div className="flex gap-1">
-                  <TrendingUp className="w-4 h-4 text-green-500" />
-                  <TrendingDown className="w-4 h-4 text-destructive" />
-                </div>
-                <div>
-                  <p className="text-xs text-muted-foreground">Net Votes</p>
-                  <p
-                    className={`font-semibold ${
-                      netVotes >= 0
-                        ? "text-green-600 dark:text-green-500"
-                        : "text-destructive"
-                    }`}
-                  >
-                    {netVotes >= 0 ? "+" : ""}
-                    {netVotes}
-                  </p>
-                </div>
-              </div>
+
             </div>
           </CardContent>
         </Card>
@@ -218,8 +213,8 @@ export default async function DiscussionPage({
           <CardContent>
             {discussion.content && discussion.content.includes("undefined") ? (
               <p className="text-muted-foreground italic">
-                Share updates, ask questions, and connect with others affected
-                by this {discussion.zone.disasterType.toLowerCase()} event.
+                Share updates and connect with others about this{" "}
+                {discussion.zone.disasterType.toLowerCase()} event.
               </p>
             ) : (
               <p className="text-foreground">{discussion.content}</p>
@@ -227,17 +222,7 @@ export default async function DiscussionPage({
 
             <Separator className="my-4" />
 
-            {/* Voting Section */}
-            <div className="flex items-center gap-2">
-              <Button variant="outline" size="sm" className="gap-2">
-                <TrendingUp className="w-4 h-4" />
-                Upvote ({discussion.upvotes})
-              </Button>
-              <Button variant="outline" size="sm" className="gap-2">
-                <TrendingDown className="w-4 h-4" />
-                Downvote ({discussion.downvotes})
-              </Button>
-            </div>
+            {/* VOTING REMOVED */}
           </CardContent>
         </Card>
 
@@ -249,10 +234,10 @@ export default async function DiscussionPage({
               Feedbacks ({discussion.comments.length})
             </h2>
           </CardHeader>
+
           <CardContent className="space-y-4">
             {discussion.comments.length > 0 ? (
               discussion.comments.map((comment) => {
-                // Check if user is affected by checking if their location is in affectedUserLocations
                 const isAffected = discussion.zone.affectedUserLocations.some(
                   (affected) =>
                     affected.userLocation.userId === comment.authorId
@@ -266,11 +251,14 @@ export default async function DiscussionPage({
                     <Avatar>
                       <AvatarFallback>U</AvatarFallback>
                     </Avatar>
+
                     <div className="flex-1">
                       <div className="flex items-center gap-2 mb-1 flex-wrap">
                         <span className="font-semibold text-sm">
                           {comment.author.firstName} {comment.author.lastName}
                         </span>
+
+                        {/* Affected Badge */}
                         {isAffected ? (
                           <span className="px-2 py-0.5 rounded-full text-xs font-medium bg-destructive/10 text-destructive border border-destructive/20">
                             Affected
@@ -280,10 +268,12 @@ export default async function DiscussionPage({
                             Not Affected
                           </span>
                         )}
+
                         <span className="text-xs text-muted-foreground">
                           {formatDate(comment.createdAt)}
                         </span>
                       </div>
+
                       <p className="text-sm">{comment.content}</p>
                     </div>
                   </div>
