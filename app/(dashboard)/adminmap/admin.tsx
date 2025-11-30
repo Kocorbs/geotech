@@ -44,7 +44,7 @@ export default function Admin({
           <SelectContent>
             <SelectItem value="ALL">All</SelectItem>
             <SelectItem value="ACTIVE">Active</SelectItem>
-            <SelectItem value="RESOLVED">Resolved</SelectItem>
+            <SelectItem value="RESOLVED">Safe</SelectItem>
           </SelectContent>
         </Select>
       </div>
