@@ -25,7 +25,7 @@ interface StatisticsProps {
 
 export function Statistics({ facilities, zones }: StatisticsProps) {
   const activeZones = zones.filter((zone) => zone.status === "ACTIVE");
-  const resolvedZones = zones.filter((zone) => zone.status === "RESOLVED");
+  const resolvedZones = zones.filter((zone) => zone.status === "SAFE");
 
   const facilitiesByType = facilities.reduce((acc, facility) => {
     acc[facility.type] = (acc[facility.type] || 0) + 1;
@@ -99,7 +99,7 @@ export function Statistics({ facilities, zones }: StatisticsProps) {
         <Card>
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
             <CardTitle className="text-sm font-medium">
-              Resolved Zones
+              Safe Zones
             </CardTitle>
             <CheckCircle2 className="h-4 w-4 text-green-500" />
           </CardHeader>
