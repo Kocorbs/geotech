@@ -25,7 +25,7 @@ interface StatisticsProps {
 
 export function Statistics({ facilities, zones }: StatisticsProps) {
   const activeZones = zones.filter((zone) => zone.status === "ACTIVE");
-  const resolvedZones = zones.filter((zone) => zone.status === "SAFE");
+  const resolvedZones = zones.filter((zone) => zone.status === "RESOLVED");
 
   const facilitiesByType = facilities.reduce((acc, facility) => {
     acc[facility.type] = (acc[facility.type] || 0) + 1;
