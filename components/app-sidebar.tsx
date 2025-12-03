@@ -3,14 +3,11 @@
 import * as React from "react";
 import {
   IconDashboard,
-  IconFileWord,
-  IconHelp,
   IconLocation,
   IconMap,
+  IconMap2,
   IconMessages,
   IconMicrophone,
-  IconReport,
-  IconSearch,
   IconSettings,
 } from "@tabler/icons-react";
 
@@ -69,6 +66,11 @@ const data = {
       title: "Admin Map",
       url: "/adminmap",
       icon: IconMap,
+    },
+    {
+      title: "Satelite Map",
+      url: "/satelitemap",
+      icon: IconMap2,
     },
   ],
 };
