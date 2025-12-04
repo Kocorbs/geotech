@@ -210,3 +210,241 @@
     letter-spacing: var(--tracking-normal);
   }
 }
+
+/* Typhoon visualization styles */
+.typhoon-marker {
+  position: relative;
+  width: 80px;
+  height: 80px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.typhoon-eye {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 20px;
+  height: 20px;
+  background: linear-gradient(45deg, #ef4444, #dc2626);
+  border-radius: 50%;
+  border: 3px solid white;
+  box-shadow: 0 0 15px rgba(239, 68, 68, 0.8);
+  z-index: 20;
+  animation: eyePulse 1.5s infinite alternate;
+}
+
+.eye-inner {
+  width: 6px;
+  height: 6px;
+  background-color: white;
+  border-radius: 50%;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  animation: eyeInnerPulse 2s infinite;
+}
+
+.typhoon-spiral {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+}
+
+.spiral-arm {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 40px;
+  height: 40px;
+  border: 2px solid transparent;
+  border-top-color: #ef4444;
+  border-radius: 50%;
+  transform-origin: center;
+  animation: spiralRotation 3s infinite linear;
+}
+
+.spiral-arm:nth-child(1) {
+  animation-delay: 0s;
+  width: 60px;
+  height: 60px;
+}
+
+.spiral-arm:nth-child(2) {
+  animation-delay: 0.5s;
+  width: 50px;
+  height: 50px;
+}
+
+.spiral-arm:nth-child(3) {
+  animation-delay: 1s;
+  width: 70px;
+  height: 70px;
+}
+
+.spiral-arm:nth-child(4) {
+  animation-delay: 1.5s;
+  width: 55px;
+  height: 55px;
+}
+
+.typhoon-label {
+  position: absolute;
+  top: -30px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: linear-gradient(135deg, #ef4444, #dc2626);
+  color: white;
+  padding: 4px 12px;
+  border-radius: 20px;
+  font-size: 12px;
+  font-weight: bold;
+  white-space: nowrap;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
+  z-index: 30;
+}
+
+.typhoon-category {
+  position: absolute;
+  bottom: -25px;
+  left: 50%;
+  transform: translateX(-50%);
+  background-color: white;
+  color: #dc2626;
+  padding: 2px 8px;
+  border-radius: 10px;
+  font-size: 10px;
+  font-weight: bold;
+  border: 1px solid #dc2626;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+  z-index: 30;
+}
+
+/* Typhoon circles animation */
+.typhoon-area {
+  animation: circlePulse 4s infinite alternate;
+}
+
+.typhoon-eye-wall {
+  animation: eyeWallPulse 2s infinite alternate;
+}
+
+/* Wind direction indicator */
+.wind-direction {
+  position: relative;
+  width: 30px;
+  height: 30px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.direction-arrow {
+  width: 0;
+  height: 0;
+  border-left: 6px solid transparent;
+  border-right: 6px solid transparent;
+  border-bottom: 15px solid #3b82f6;
+  position: relative;
+}
+
+.direction-arrow::after {
+  content: '';
+  position: absolute;
+  top: 15px;
+  left: -2px;
+  width: 4px;
+  height: 10px;
+  background-color: #3b82f6;
+}
+
+/* Animations */
+@keyframes eyePulse {
+  0% { 
+    transform: translate(-50%, -50%) scale(1);
+    box-shadow: 0 0 15px rgba(239, 68, 68, 0.8);
+  }
+  100% { 
+    transform: translate(-50%, -50%) scale(1.2);
+    box-shadow: 0 0 25px rgba(239, 68, 68, 1);
+  }
+}
+
+@keyframes eyeInnerPulse {
+  0%, 100% { opacity: 0.8; }
+  50% { opacity: 1; }
+}
+
+@keyframes spiralRotation {
+  0% { transform: translate(-50%, -50%) rotate(0deg); opacity: 0.3; }
+  100% { transform: translate(-50%, -50%) rotate(360deg); opacity: 0.8; }
+}
+
+@keyframes circlePulse {
+  0% { 
+    stroke-opacity: 0.1;
+    fill-opacity: 0.05;
+  }
+  100% { 
+    stroke-opacity: 0.3;
+    fill-opacity: 0.15;
+  }
+}
+
+@keyframes eyeWallPulse {
+  0% { 
+    fill-opacity: 0.1;
+    stroke-width: 2;
+  }
+  100% { 
+    fill-opacity: 0.3;
+    stroke-width: 3;
+  }
+}
+
+/* Typhoon popup styles */
+.typhoon-details-popup {
+  min-width: 250px;
+}
+
+.typhoon-details-popup h3 {
+  color: #dc2626;
+  margin-bottom: 10px;
+  border-bottom: 2px solid #fecaca;
+  padding-bottom: 5px;
+}
+
+.typhoon-details-popup p {
+  margin: 3px 0;
+  font-size: 13px;
+}
+
+/* Map legend adjustments */
+.leaflet-control-attribution {
+  font-size: 9px !important;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .typhoon-marker {
+    width: 60px;
+    height: 60px;
+  }
+  
+  .typhoon-label {
+    font-size: 10px;
+    padding: 2px 8px;
+    top: -25px;
+  }
+  
+  .typhoon-category {
+    font-size: 8px;
+    padding: 1px 6px;
+    bottom: -20px;
+  }
+}
