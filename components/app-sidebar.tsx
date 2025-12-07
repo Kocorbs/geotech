@@ -53,6 +53,11 @@ const data = {
       url: "/announcements",
       icon: IconMicrophone,
     },
+    {
+      title: "Satelite Map",
+      url: "/satelitemap",
+      icon: IconMap2,
+    }
   ],
   navSecondary: [
     {
@@ -66,12 +71,7 @@ const data = {
       title: "Admin Map",
       url: "/adminmap",
       icon: IconMap,
-    },
-    {
-      title: "Satelite Map",
-      url: "/satelitemap",
-      icon: IconMap2,
-    },
+    }
   ],
 };
 
